@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Users Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #FF8C00;
+      --primary-dark: #E67E00;
+      --primary-light: #FFA726;
+      --text-color: #333;
+      --light-gray: #f5f5f5;
+      --white: #ffffff;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--light-gray);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: var(--white);
+      padding: 20px 0;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      border-radius: 8px;
+    }
+
+    header h1 {
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .user-count {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      background-color: var(--primary-light);
+      color: var(--white);
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: 500;
+    }
+
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--white);
+      box-shadow: var(--shadow);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .users-table th {
+      background-color: var(--primary-color);
+      color: var(--white);
+      padding: 15px;
+      text-align: left;
+    }
+
+    .users-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .users-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .users-table tr:hover {
+      background-color: rgba(255, 167, 38, 0.1);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 1.2rem;
+      color: var(--primary-dark);
+    }
+
+    .error-message {
+      color: #F44336;
+      text-align: center;
+      padding: 20px;
+      background-color: #FFEBEE;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .users-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Registered Users Dashboard</h1>
+    </header>
+
+    <div id="userCount" class="user-count">Loading user count...</div>
+    <div id="errorContainer"></div>
+    <div id="loading" class="loading">Loading users...</div>
+
+    <table class="users-table" id="usersTable" style="display: none;">
+      <thead>
+        <tr>
+          <th>UID</th>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Student ID</th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody">
+        <!-- Users will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // add your Firebase configuration
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function showError(message) {
+      const errorContainer = document.getElementById('errorContainer');
+      errorContainer.innerHTML =` <div class="error-message">${message}</div>`;
+    }
+
+    function listUsers() {
+      const loadingElement = document.getElementById('loading');
+      const usersTable = document.getElementById('usersTable');
+      const usersTableBody = document.getElementById('usersTableBody');
+
+      loadingElement.style.display = 'block';
+      usersTable.style.display = 'none';
+
+      database.ref("users").once("value")
+        .then(snapshot => {
+          const users = snapshot.val();
+          usersTableBody.innerHTML = ""; // Clear old rows
+
+          if (users) {
+            const keys = Object.keys(users);
+            document.getElementById('userCount').textContent =`Total Users: ${keys.length}`;
+
+            keys.forEach(uid => {
+              const user = users[uid];
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${uid}</td>
+                <td>${user.fullName || 'N/A'}</td>
+                <td>${user.email || 'N/A'}</td>
+                <td>${user.studentid || 'N/A'}</td>
+              `;
+              usersTableBody.appendChild(row);
+            });
+
+            usersTable.style.display = 'table';
+          } else {
+            showError("No users found.");
+          }
+
+          loadingElement.style.display = 'none';
+        })
+        .catch(error => {
+          console.error("Error fetching users:", error);
+          showError("Failed to load users.");
+          loadingElement.style.display = 'none';
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      listUsers();
+    });
+  </script>
+</body>
+</html>

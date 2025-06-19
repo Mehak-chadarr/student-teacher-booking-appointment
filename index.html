@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student-Teacher Appointment</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #fff3e0, #ffe0b2);
+      color: #333;
+    }
+
+    header {
+      background-color: #ff6f00;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    header h1 {
+      font-size: 28px;
+    }
+
+    nav button {
+      background-color: white;
+      color: #ff6f00;
+      border: none;
+      padding: 10px 20px;
+      margin-left: 15px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    nav button:hover {
+      background-color: #ffe0b2;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 100px 20px;
+     background-image: url('https://img.freepik.com/free-vector/back-school-concept_52683-39831.jpg');
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      position: relative;
+      min-height: 60vh;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .hero h2 {
+      font-size: 42px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 600px;
+      margin: auto;
+      line-height: 1.5;
+    }
+
+    .section {
+      padding: 50px 20px;
+      max-width: 1000px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .section h3 {
+      color: #e65100;
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+
+    .section p {
+      font-size: 18px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .feature-box {
+      background-color: #fff7ed;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 280px;
+      transition: 0.3s ease;
+    }
+
+    .feature-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .feature-box h4 {
+      color: #ff6f00;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      background-color: #ff6f00;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 50px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h2 {
+        font-size: 28px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .feature-box {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Appointment Booking</h1>
+    <nav>
+      <button onclick="location.href='login.html'">Login</button>
+      <button onclick="location.href='register.html'">Register</button>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Book Appointments with Ease</h2>
+      <p>Our platform connects students and teachers for seamless scheduling. Manage meetings, view availability, and simplify communication.</p>
+    </div>
+  </section>
+
+  <!-- Overview Section -->
+  <section class="section">
+    <h3>What is this Platform?</h3>
+    <p>
+      This Student-Teacher Appointment Booking System helps educational institutions digitize and streamline academic meetings. Whether you’re a student needing guidance or a teacher organizing time, this tool enhances productivity and collaboration.
+    </p>
+  </section>
+
+  <!-- Features Section -->
+  <section class="section">
+    <h3>Key Features</h3>
+    <div class="features">
+      <div class="feature-box">
+        <h4>🔐 Secure Login</h4>
+        <p>Separate login for students, teachers, and admins with Firebase authentication.</p>
+      </div>
+      <div class="feature-box">
+        <h4>📅 Smart Scheduling</h4>
+        <p>Students can view and book available slots. Teachers can approve or cancel with one click.</p>
+      </div>
+      <div class="feature-box">
+        <h4>💬 Real-time Messaging</h4>
+        <p>Integrated messaging system helps users communicate quickly before or after appointments.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Student-Teacher Appointment System | Designed with Orange Theme
+  </footer>
+
+</body>
+</html>

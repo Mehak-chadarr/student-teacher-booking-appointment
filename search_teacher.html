@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Teachers</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1650&q=80') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    header {
+      background-color: rgba(255, 102, 0, 0.9);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    }
+
+    .teacher-card {
+      background: #fff5ec;
+      padding: 20px;
+      margin: 15px 0;
+      border-left: 6px solid #ff7b00;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.3s ease;
+    }
+
+    .teacher-card:hover {
+      background: #fff0e0;
+    }
+
+    .teacher-info h3 {
+      margin: 0;
+      color: #ff6600;
+    }
+
+    .teacher-info p {
+      margin: 5px 0;
+    }
+
+    .send-btn {
+      background-color: #ff7b00;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .send-btn:hover {
+      background-color: #e66c00;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #555;
+      font-size: 18px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>All Teachers</header>
+
+  <div class="container" id="teacherList">
+    <!-- Teacher cards will be inserted here -->
+  </div>
+
+  <!-- Firebase + JS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import {
+      getDatabase, ref, get
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+  // add your Firebase configuration
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase();
+
+    const teacherList = document.getElementById("teacherList");
+
+    function loadTeachers() {
+      const teachersRef = ref(db, "teachers");
+      get(teachersRef).then(snapshot => {
+        if (snapshot.exists()) {
+          snapshot.forEach(childSnapshot => {
+            const data = childSnapshot.val();
+            const teacherId = childSnapshot.key;
+
+            const card = document.createElement("div");
+            card.className = "teacher-card";
+
+            card.innerHTML = `
+              <div class="teacher-info">
+                <h3>${data.fullname}</h3>
+                <p><strong>Department:</strong> ${data.department}</p>
+                <p><strong>Subject:</strong> ${data.subject}</p>
+              </div>
+              <button class="send-btn" onclick="sendMessage('${teacherId}', '${data.fullname}')">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+            `;
+
+            teacherList.appendChild(card);
+          });
+        } else {
+          teacherList.innerHTML = '<p class="no-data">No teachers found.</p>';
+        }
+      });
+    }
+
+    loadTeachers();
+
+    // Redirect to message page
+    window.sendMessage = function(teacherId, teacherName) {
+      // You can store these values in localStorage or URL params to use on the next page
+      localStorage.setItem("selectedTeacherId", teacherId);
+      localStorage.setItem("selectedTeacherName", teacherName);
+      window.location.href = "message.html";
+    };
+  </script>
+</body>
+</html>

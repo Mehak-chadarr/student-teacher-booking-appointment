@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Send Message</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+   
+  background: url('https://images.pexels.com/photos/5212338/pexels-photo-5212338.jpeg?auto=compress&cs=tinysrgb&w=1600') no-repeat center center fixed;
+  background-size: cover;
+
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.96);
+      padding: 40px 35px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 480px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    h2 {
+      color: #ff6a00;
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ffa94d;
+      border-radius: 8px;
+      font-size: 16px;
+      resize: none;
+      background: #fffaf5;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #ff6a00;
+      color: white;
+      padding: 14px;
+      font-size: 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e65c00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2><i class="fas fa-paper-plane"></i> Send Message to Teacher</h2>
+    <form id="sendMessageForm">
+      <label for="message">Your Message</label>
+      <textarea id="message" name="message" rows="6" placeholder="Type your message here..." required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+// add your Firebase configuration
+   const app= initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const teacherName = localStorage.getItem("selectedTeacherName");
+    const teacherId = localStorage.getItem("selectedTeacherId");
+
+    const form = document.getElementById("sendMessageForm");
+
+    let currentUser = null;
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+      } else {
+        alert("Please log in first.");
+        window.location.href = "login.html";
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const message = document.getElementById("message").value.trim();
+
+      if (!message) return alert("Message cannot be empty.");
+
+      const newMsgRef = push(ref(db, "messages"));
+      await set(newMsgRef, {
+        studentId: currentUser.uid,
+        studentName: currentUser.displayName || "Anonymous",
+        studentEmail: currentUser.email,
+        teacherId,
+        teacherName,
+        message,
+        timestamp: new Date().toISOString()
+      });
+
+      alert("Message sent successfully!");
+      form.reset();
+    });
+  </script>
+</body>
+</html>

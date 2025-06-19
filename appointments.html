@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Appointments | Academic Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+ <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #fff3e0, #ffe0cc);
+    color: #333;
+    min-height: 100vh;
+  }
+
+  nav {
+    background-color: #ff6f3c;
+    padding: 15px 30px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  nav .logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+
+  .heading {
+    font-size: 2.4rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #ff6f3c;
+    text-align: center;
+    text-shadow: 1px 1px 2px #ffd0b3;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 25px rgba(255, 111, 60, 0.25);
+    border-left: 6px solid #ff6f3c;
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 30px rgba(255, 111, 60, 0.3);
+  }
+
+  .card h3 {
+    margin-bottom: 12px;
+    color: #ff6f3c;
+    font-size: 1.5rem;
+  }
+
+  .card p {
+    margin: 6px 0;
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    nav .logo {
+      font-size: 1.4rem;
+    }
+
+    .heading {
+      font-size: 1.8rem;
+    }
+
+    .card {
+      padding: 18px 22px;
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+    }
+  }
+</style>
+
+
+</head>
+<body>
+  <nav>
+    <div class="logo">Academic Connect</div>
+    <div>Student Panel</div>
+  </nav>
+
+  <div class="container">
+    <div class="heading">My Appointments</div>
+    <div id="appointmentsList">
+      <!-- Appointments will be displayed here -->
+    </div>
+  </div>
+
+  <!-- appointments.html -->
+<div id="appointmentsList" style="padding: 20px;"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+// add your Firebase configuration
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
+const appointmentsList = document.getElementById("appointmentsList");
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const email = user.email;
+    console.log("Logged in user email:", email); // debug check
+
+    const appointmentsRef = ref(db, "appointments");
+
+    onValue(appointmentsRef, (snapshot) => {
+      appointmentsList.innerHTML = "";
+      const data = snapshot.val();
+      let found = false;
+
+      for (let key in data) {
+        const appt = data[key];
+        console.log("Checking appointment with:", appt.studentEmail); // debug
+
+        if (appt.studentEmail === email) {
+          found = true;
+          const card = document.createElement("div");
+          card.style.background = "#fff7e6";
+          card.style.border = "1px solid orange";
+          card.style.borderRadius = "12px";
+          card.style.padding = "16px";
+          card.style.marginBottom = "16px";
+          card.style.boxShadow = "0 4px 8px rgba(255,165,0,0.2)";
+
+          card.innerHTML = `
+            <h3 style="color: orange;">${appt.teacherName}</h3>
+            <p><strong>Purpose:</strong> ${appt.purpose}</p>
+            <p><strong>Date:</strong> ${appt.date}</p>
+            <p><strong>Time:</strong> ${appt.time}</p>
+            <p><strong>Notes:</strong> ${appt.notes}</p>
+            <p><strong>Status:</strong> ${appt.status}</p>
+          `;
+          appointmentsList.appendChild(card);
+        }
+      }
+
+      if (!found) {
+        appointmentsList.innerHTML = '<p style="color: gray;">No appointments found for your account.</p>';
+      }
+    });
+  } else {
+    alert("Not logged in.");
+    window.location.href = "login.html";
+  }
+});
+</script>
+</body>
+</html>

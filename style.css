@@ -1,0 +1,52 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff7ed;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+}
+
+h1, h3 {
+  color: #ff7700;
+  text-align: center;
+}
+
+.search-box, input[type="text"], input[type="date"], input[type="time"], textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 20px;
+  border: 1px solid #ffa94d;
+  border-radius: 6px;
+}
+
+.search-btn, .submit-btn, .book-btn {
+  background-color: #ff7700;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.search-btn:hover, .submit-btn:hover, .book-btn:hover {
+  background-color: #e66100;
+}
+
+.teacher-card {
+  background-color: #fff3e0;
+  padding: 15px;
+  border: 1px solid #ffa94d;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}

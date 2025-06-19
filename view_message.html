@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teacher Message Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.pexels.com/photos/5212338/pexels-photo-5212338.jpeg?auto=compress&cs=tinysrgb&w=1600') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #ff7f50;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      font-size: 28px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #ffffffdd;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    .message-card {
+      background-color: #fff;
+      border-left: 5px solid #ff7f50;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: 0.3s ease;
+    }
+
+    .message-card:hover {
+      transform: scale(1.01);
+    }
+
+    .message-header {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .message-email {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .message-text {
+      margin-top: 10px;
+      color: #444;
+    }
+
+    .timestamp {
+      font-size: 12px;
+      text-align: right;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <i class="fas fa-envelope-open-text"></i> Teacher Message Panel
+  </header>
+
+  <div class="container" id="messageContainer">
+    <!-- Messages will appear here -->
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+  // add your Firebase configuration
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth();
+
+    const messageContainer = document.getElementById('messageContainer');
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const teacherId = user.uid;
+        const messagesRef = ref(db, 'messages');
+
+        onValue(messagesRef, (snapshot) => {
+          messageContainer.innerHTML = '';
+          snapshot.forEach((childSnapshot) => {
+            const data = childSnapshot.val();
+
+            if (data.teacherId === teacherId) {
+              const card = document.createElement('div');
+              card.classList.add('message-card');
+              card.innerHTML = `
+                <div class="message-header">${data.studentName}</div>
+                <div class="message-email">${data.studentEmail}</div>
+                <div class="message-text">${data.message}</div>
+                <div class="timestamp">${data.timestamp || ''}</div>
+              `;
+              messageContainer.appendChild(card);
+            }
+          });
+        });
+      } else {
+        window.location.href = 'login.html'; // redirect if not logged in
+      }
+    });
+  </script>
+</body>
+</html>

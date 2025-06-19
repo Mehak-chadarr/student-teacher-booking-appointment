@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Connect | Book Appointments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="booking.css">
+   <!-- Firebase SDKs -->
+
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-handshake"></i> Academic Connect</h1>
+            <p>Book one-on-one sessions with your teachers</p>
+        </header>
+
+        <div class="booking-container">
+            <div class="teacher-selection">
+                <h2><i class="fas fa-chalkboard-teacher"></i> Select Teacher</h2>
+                <div class="teachers-grid" id="teachersList">
+                    <!-- Teachers will be loaded here -->
+               
+                </div>
+                <div id="summaryTeacher">select a teacher to see details here</div>
+            </div>
+
+            <div class="calendar-section">
+                <h2><i class="far fa-calendar-alt"></i> Select Date & Time</h2>
+                <div class="calendar-header">
+                    <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                    <h3 id="currentMonth">Month Year</h3>
+                    <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="calendar-grid" id="calendar">
+                    <!-- Calendar will be generated here -->
+                </div>
+                <div class="time-slots" id="timeSlots">
+                    <h3>Available Time Slots</h3>
+                    <div class="slots-grid" id="slotsGrid">
+                        <!-- Time slots will appear here -->
+                         <button class="slot-btn"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-form" id="bookingForm">
+                <h2><i class="fas fa-bookmark"></i> Confirm Booking</h2>
+                <form id="appointmentForm">
+                    <div class="form-group">
+                        <label for="studentName">Your Name</label>
+                        <input type="text" id="studentName" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentEmail">Email</label>
+                        <input type="email" id="studentEmail" required placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="meetingPurpose">Purpose of Meeting</label>
+                        <select id="meetingPurpose" required>
+                            <option value="">Select a purpose</option>
+                            <option value="Course Consultation">Course Consultation</option>
+                            <option value="Assignment Help">Assignment Help</option>
+                            <option value="Research Guidance">Research Guidance</option>
+                            <option value="Career Advice">Career Advice</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="otherPurposeContainer" style="display: none;">
+                        <label for="otherPurpose">Please specify</label>
+                        <input type="text" id="otherPurpose" placeholder="Enter purpose">
+                    </div>
+                    <div class="form-group">
+                        <label for="meetingNotes">Additional Notes</label>
+                        <textarea id="meetingNotes" rows="3" placeholder="Any additional information for the teacher"></textarea>
+                    </div>
+                    <div class="booking-summary">
+                        <h4>Appointment Summary</h4>
+                        <p><strong>Teacher:</strong> <span id="summaryTeacher">Not selected</span></p>
+                        <p><strong>Date:</strong> <span id="summaryDate">Not selected</span></p>
+                        <p><strong>Time:</strong> <span id="summaryTime">Not selected</span></p>
+                    </div>
+                    <button type="submit" class="submit-btn">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Booking Confirmed!</h2>
+            <p>Your appointment has been successfully scheduled.</p>
+            <div class="modal-summary">
+                <p><strong>Teacher:</strong> <span id="modalTeacher"></span></p>
+                <p><strong>Date:</strong> <span id="modalDate"></span></p>
+                <p><strong>Time:</strong> <span id="modalTime"></span></p>
+            </div>
+            <button class="modal-btn" id="closeModalBtn">Done</button>
+        </div>
+    </div>
+    
+    <script type="module" src="book.js">
+        
+  
+
+
+    </script>
+</body>
+</html>

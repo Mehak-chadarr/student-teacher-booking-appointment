@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Appointments | Teacher Panel</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    header {
+      background-color: #ff6600;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 30px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      width: 300px;
+      margin: 15px;
+      border-radius: 18px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    .card-content h3 {
+      color: #ff6600;
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .card-content p {
+      margin: 5px 0;
+      font-size: 15px;
+      color: #333;
+    }
+
+    .no-appointments {
+      font-size: 22px;
+      color: white;
+      text-align: center;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+
+<header>My Accepted Appointments</header>
+
+<div class="container" id="appointmentList">
+  <div class="no-appointments" id="noAppointments" style="display: none;">No accepted appointments found.</div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+  // add your Firebase configuration
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const auth = getAuth();
+
+  const appointmentList = document.getElementById('appointmentList');
+  const noAppointments = document.getElementById('noAppointments');
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      const teacherId = user.uid;
+      console.log("Logged-in teacherId:", teacherId);
+
+      const appointmentsRef = ref(db, 'appointments');
+      onValue(appointmentsRef, (snapshot) => {
+        appointmentList.innerHTML = '';
+        let found = false;
+
+        snapshot.forEach(child => {
+          const appt = child.val();
+          console.log("Checking appointment:", appt);
+
+          if (appt.teacherId === teacherId && appt.status.toLowerCase() === "accepted") {
+            found = true;
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+              <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Student">
+              <div class="card-content">
+                <h3>${appt.studentName}</h3>
+                <p><strong>Date:</strong> ${appt.date}</p>
+                <p><strong>Time:</strong> ${appt.time}</p>
+                <p><strong>Reason:</strong> ${appt.reason || appt.purpose}</p>
+              </div>
+            `;
+            appointmentList.appendChild(card);
+          }
+        });
+
+        noAppointments.style.display = found ? 'none' : 'block';
+      });
+
+    } else {
+      window.location.href = 'login.html';
+    }
+  });
+</script>
+
+</body>
+</html>

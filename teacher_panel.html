@@ -1,0 +1,167 @@
+
+            
+           <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teacher Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(rgba(255, 119, 48, 0.8), rgba(255, 81, 0, 0.9)), 
+        url('https://images.pexels.com/photos/5212338/pexels-photo-5212338.jpeg?auto=compress&cs=tinysrgb&w=1600') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    header {
+      padding: 25px 10px;
+      text-align: center;
+      font-size: 34px;
+      font-weight: 700;
+      background-color: rgba(255, 87, 34, 0.95);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      letter-spacing: 1px;
+    }
+
+    .intro {
+      text-align: center;
+      padding: 20px;
+      font-size: 18px;
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    .quote {
+      text-align: center;
+      margin-top: 10px;
+      font-style: italic;
+      font-size: 16px;
+      color: #ffe6d3;
+    }
+
+    .dashboard {
+      max-width: 900px;
+      margin: 30px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      padding: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 18px;
+      text-align: center;
+      padding: 30px 20px;
+      box-shadow: 0 0 20px rgba(255, 87, 34, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      color: white;
+      text-decoration: none;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(255, 87, 34, 0.5);
+    }
+
+    .card i {
+      font-size: 36px;
+      margin-bottom: 15px;
+      color: #fff5e1;
+    }
+
+    .card span {
+      display: block;
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    #logoutbtn {
+  margin-left: 20px;
+  padding: 10px 20px;
+  background-color: white;
+  color: #ff6f00;
+  border: 2px solid #ff6f00;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#logoutbtn:hover {
+  background-color: #ff6f00;
+  color: white;
+}
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 10px;
+      font-size: 14px;
+      color: #ffe6d3;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <i class="fas fa-user-tie"></i> Teacher Dashboard
+    <button id="logoutbtn">logout</button>
+  </header>
+
+  <div class="intro">
+    <h2>Welcome, Respected Teacher!</h2>
+    <p>This is your personalized dashboard where you can manage your appointments with students, respond to messages, and stay updated on your schedule—all in one place.</p>
+    <p class="quote">"Teaching is the one profession that creates all other professions."</p>
+  </div>
+
+  <div class="dashboard">
+    <a href="accept_reject.html" class="card">
+      <i class="fas fa-calendar-check"></i>
+      <span>Approve / Cancel Appointments</span>
+    </a>
+    <a href="view_message.html" class="card">
+      <i class="fas fa-comments"></i>
+      <span>View Messages</span>
+    </a>
+    <a href="teacher_appointment.html" class="card">
+      <i class="fas fa-calendar-alt"></i>
+      <span>View All Appointments</span>
+    </a>
+    
+  </div>
+
+  <footer>
+    &copy; 2025 FITPRO Academic Panel | Designed for Excellence in Student Mentorship
+  </footer>
+
+  <!-- Firebase Logout Script -->
+  <script type="module">
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+// add your Firebase configuration
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    document.getElementById('logoutbtn').addEventListener('click', () => {
+      signOut(auth).then(() => {
+        alert("Logged out successfully!");
+        window.location.href = "login.html";
+      }).catch((error) => {
+        alert("Error logging out: " + error.message);
+      });
+    });
+  </script>
+
+</body>
+</html>

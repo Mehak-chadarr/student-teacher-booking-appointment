@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teacher Dashboard</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #f9f9f9;
+    }
+
+    nav {
+      background-color: #ff6f00;
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      margin-right: px;
+    }
+
+    #logout-btn {
+      margin-left: auto;
+      background-color: white;
+      color: #ff6f00;
+      padding: 6px 15px;
+      border-radius: 4px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .container {
+      padding: 40px 60px;
+      text-align: center;
+    }
+
+    .hero {
+      background: linear-gradient(to right, #ff9100, #ff6f00);
+      padding: 50px 30px;
+      border-radius: 10px;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 18px;
+    }
+
+    .features {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background-color: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      width: 250px;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      color: #ff6f00;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <nav>
+    <div class="logo">Student  Dashboard</div>
+    <div class="nav-links">
+      <a href="student_dashboard.html">Dashboard</a>
+      <a href="search_teacher.html">Search Teacher</a>
+      <a href="booking.html">Book Appointment</a>
+      <a href="appointments.html">My Appointments</a>
+    </div>
+    <button id="logout-btn">Logout</button>
+  </nav>
+
+  <div class="container">
+    <div class="hero">
+      <h1>Welcome to Your Dashboard</h1>
+      <p>Manage your appointments, search teachers and stay organized with ease.</p>
+    </div>
+
+    <div class="features">
+      <div class="card">
+        <h3>Search Teachers</h3>
+        <p>Find teachers by department, subject, and more.</p>
+      </div>
+      <div class="card">
+        <h3>Book Appointments</h3>
+        <p>Schedule meetings easily with available teachers.</p>
+      </div>
+      <div class="card">
+        <h3>My Appointments</h3>
+        <p>Track and manage all your scheduled meetings.</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+   import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+// add your Firebase configuration
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      signOut(auth).then(() => {
+        alert("Logged out successfully!");
+        window.location.href = "login.html";
+      }).catch((error) => {
+        alert("Error logging out: " + error.message);
+      });
+    });
+    
+  </script>
+</body>
+</html>
